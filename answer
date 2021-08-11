@@ -1,0 +1,70 @@
+<?php
+    
+$calculator = new PasswordComplexityCalculator();
+
+class PasswordComplexityCalculator
+{
+    public function calculate(int $lowerBound, int $upperBound): int
+    {
+
+        $countPasswords=0;
+		    $countPasswordsPartOne=0;
+		
+        for($i=$lowerBound; $i<=$upperBound;$i++){
+			
+			  //$flag=1;
+			  $number_array = array (substr($i,0,1),substr($i,1,1),substr($i,2,1),substr($i,3,1),substr($i,4,1),substr($i,5,1));
+			
+			  // Check Two adjacent digits are equal
+			  if($number_array[0]==$number_array[1] || $number_array[1]==$number_array[2] || $number_array[2]==$number_array[3] || $number_array[3]==$number_array[4] || $number_array[4]==$number_array[5]){ 
+			
+				//check adjacent digits never decreasing
+				if($number_array[0]==$number_array[1] || $number_array[1] > $number_array[0]){ //comparing 1st and 2nd digits
+					if($number_array[1]==$number_array[2] || $number_array[2] > $number_array[1]){ //comparing 2nd and 3rd digits
+						if($number_array[2]==$number_array[3] || $number_array[3] > $number_array[2]){ //comparing 3rd and 4th digits
+							if($number_array[3]==$number_array[4] || $number_array[4] > $number_array[3]){ //comparing 4th and 5th digits
+								if($number_array[4]==$number_array[5] || $number_array[5] > $number_array[4]){ //comparing 5th and 6th digits
+								
+									$countPasswordsPartOne++; //part 1 count
+									
+									
+									// count the each elements in the array
+									unset($output);
+									foreach ($number_array as $v) {
+										$output[$v] = ($output[$v] ?? 0) + 1;
+									}
+									
+									//searching for occurance more than twice
+									$twice = array_search(2,$output,true);
+									$thrice = array_search(3,$output,true);
+									$quard = array_search(4,$output,true);
+									
+									if(($twice) || ($twice&&$thrice) || ($twice&&$quard)){
+										$countPasswords++; //Part 2 count
+										echo $number_array[0].$number_array[1].$number_array[2].$number_array[3].$number_array[4].$number_array[5]."\r\n";
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			}
+        }
+        echo "<br><br>Number of password combinations Part 1:".$countPasswordsPartOne. "<br>";
+        return $countPasswords;
+		//return $countPasswordsPartOne;  		
+    }
+}
+
+
+// Input and Output
+$numbers = '278384-824795';
+[$lowerBound, $upperBound] = explode ('-', $numbers);
+
+$countOfPasswords = $calculator->calculate($lowerBound, $upperBound);
+
+echo "<br><b><u>Hacker Rank Question 1 </u></b><br><br>";
+echo "Input Range is : " .$numbers."<br><br>";
+echo "Number of password combinations Part 2:" . $countOfPasswords . "\n";
+?>
